@@ -58,13 +58,34 @@ class _TiyuvtaMixin:
     def __str__(self):
         return "tiyuvta: {}".format(self.model_id)
 
+    def _reject_unsupported_attachments(self, prompt):
+        # llm core validates attachments in Model.prompt but NOT in
+        # Conversation.prompt (verified against llm 0.32), so `llm -c` and
+        # `llm chat` send unsupported attachments to the endpoint — a paid 400
+        # instead of a free local error. Guard here, before any HTTP.
+        for attachment in prompt.attachments or []:
+            mimetype = attachment.resolve_type()
+            if mimetype not in self.attachment_types:
+                if self.attachment_types:
+                    raise ValueError(
+                        "{} does not support attachments of type '{}', only {}".format(
+                            self.model_id, mimetype, ", ".join(sorted(self.attachment_types))
+                        )
+                    )
+                raise ValueError("{} does not support attachments".format(self.model_id))
+
 
 class TiyuvtaChat(_TiyuvtaMixin, Chat):
-    pass
+    def execute(self, prompt, stream, response, *args, **kwargs):
+        self._reject_unsupported_attachments(prompt)
+        yield from super().execute(prompt, stream, response, *args, **kwargs)
 
 
 class TiyuvtaAsyncChat(_TiyuvtaMixin, AsyncChat):
-    pass
+    async def execute(self, prompt, stream, response, *args, **kwargs):
+        self._reject_unsupported_attachments(prompt)
+        async for chunk in super().execute(prompt, stream, response, *args, **kwargs):
+            yield chunk
 
 
 # Chat's kwarg surface grows across llm versions (reasoning arrived after

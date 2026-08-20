@@ -1,6 +1,6 @@
 [project]
 name = "llm-tiyuvta"
-version = "0.1.0"
+version = "0.1.1"
 description = "LLM plugin for tiyuvta prepaid inference (api.tiyuvta.ai)"
 readme = "README.md"
 authors = [{ name = "Avi Fenesh" }]

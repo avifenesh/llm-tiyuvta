@@ -1,6 +1,9 @@
 import json
 
 import httpx
+import pytest
+from llm.models import Attachment
+
 import llm_tiyuvta
 
 
@@ -82,3 +85,23 @@ def test_models_construct_on_this_llm_version():
     assert "image/png" in chat.attachment_types
     text_only = llm_tiyuvta.TiyuvtaChat(**llm_tiyuvta._chat_kwargs(text_only_model))
     assert text_only.attachment_types == set()
+
+
+def test_execute_guard_blocks_unsupported_attachments(httpx_mock):
+    # llm core validates attachments in Model.prompt but NOT in
+    # Conversation.prompt — this pins the plugin's own execute-level guard:
+    # the ValueError must fire locally, before any HTTP request
+    qwen, text_only_model = CATALOG["data"]
+
+    text_only = llm_tiyuvta.TiyuvtaChat(**llm_tiyuvta._chat_kwargs(text_only_model))
+    image = Attachment(type="image/png", content=b"px")
+    with pytest.raises(ValueError, match="does not support attachments"):
+        text_only.conversation().prompt("hi", attachments=[image], key="x").text()
+
+    # vision model, but a type the endpoint refuses (PDF "file" parts)
+    vision = llm_tiyuvta.TiyuvtaChat(**llm_tiyuvta._chat_kwargs(qwen))
+    pdf = Attachment(type="application/pdf", content=b"%PDF")
+    with pytest.raises(ValueError, match="application/pdf"):
+        vision.conversation().prompt("hi", attachments=[pdf], key="x").text()
+
+    assert len(httpx_mock.get_requests()) == 0
