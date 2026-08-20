@@ -19,8 +19,11 @@ CATALOG = {
             },
         },
         {
-            "id": "google/gemma-4-31b-it",
-            "context_length": 262144,
+            # synthetic text-only model: everything tiyuvta actually serves has
+            # vision, so a fake id keeps the no-eyes path covered without
+            # mislabelling a real model
+            "id": "example/text-only-1b",
+            "context_length": 32768,
             "input_modalities": ["text"],
             "capabilities": {"streaming": True, "tools": True, "structured_output": True},
         },
@@ -58,18 +61,18 @@ def test_html_200_falls_back_to_stale_cache(tmp_path, httpx_mock):
 
 
 def test_capability_mapping():
-    qwen, gemma = CATALOG["data"]
+    qwen, text_only_model = CATALOG["data"]
     assert llm_tiyuvta.supports_images(qwen) is True
-    assert llm_tiyuvta.supports_images(gemma) is False
+    assert llm_tiyuvta.supports_images(text_only_model) is False
     assert llm_tiyuvta.capability(qwen, "tools") is True
-    assert llm_tiyuvta.capability(gemma, "reasoning") is False
+    assert llm_tiyuvta.capability(text_only_model, "reasoning") is False
 
 
 def test_models_construct_on_this_llm_version():
     # the bug this pins: kwargs Chat.__init__ does not accept on the installed
     # llm version must be filtered, not passed (a floor mismatch here used to
     # TypeError every llm command)
-    qwen, gemma = CATALOG["data"]
+    qwen, text_only_model = CATALOG["data"]
     chat = llm_tiyuvta.TiyuvtaChat(**llm_tiyuvta._chat_kwargs(qwen))
     async_chat = llm_tiyuvta.TiyuvtaAsyncChat(**llm_tiyuvta._chat_kwargs(qwen))
     assert chat.model_id == "tiyuvta/qwen/qwen3.8-27b"
@@ -77,5 +80,5 @@ def test_models_construct_on_this_llm_version():
     # the endpoint refuses OpenAI "file" parts — PDF must not be advertised
     assert "application/pdf" not in chat.attachment_types
     assert "image/png" in chat.attachment_types
-    text_only = llm_tiyuvta.TiyuvtaChat(**llm_tiyuvta._chat_kwargs(gemma))
+    text_only = llm_tiyuvta.TiyuvtaChat(**llm_tiyuvta._chat_kwargs(text_only_model))
     assert text_only.attachment_types == set()
