@@ -1,0 +1,25 @@
+[project]
+name = "llm-tiyuvta"
+version = "0.1.0"
+description = "LLM plugin for tiyuvta prepaid inference (api.tiyuvta.ai)"
+readme = "README.md"
+authors = [{ name = "Avi Fenesh" }]
+license = "Apache-2.0"
+requires-python = ">=3.9"
+classifiers = []
+dependencies = ["llm>=0.24", "httpx"]
+
+[project.urls]
+Homepage = "https://github.com/avifenesh/llm-tiyuvta"
+Changelog = "https://github.com/avifenesh/llm-tiyuvta/releases"
+Issues = "https://github.com/avifenesh/llm-tiyuvta/issues"
+
+[project.entry-points.llm]
+tiyuvta = "llm_tiyuvta"
+
+[project.optional-dependencies]
+test = ["pytest", "pytest-httpx"]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
