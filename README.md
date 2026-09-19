@@ -5,12 +5,13 @@
 [![Tests](https://github.com/avifenesh/llm-tiyuvta/actions/workflows/test.yml/badge.svg)](https://github.com/avifenesh/llm-tiyuvta/actions/workflows/test.yml)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/avifenesh/llm-tiyuvta/blob/main/LICENSE)
 
-[LLM](https://llm.datasette.io/) plugin for [tiyuvta](https://inference.tiyuvta.ai/) — prepaid
-open-weight-model inference with one price per model, no subscription.
+[LLM](https://llm.datasette.io/) plugin for the [tiyuvta](https://tiyuvta.ai/) trial endpoint.
 
-Every model on the endpoint speaks the identical OpenAI-compatible API: streaming, tool
-calling, structured output, and vision where the model has eyes. The plugin reads the live
-model catalog, so new models appear without a plugin update.
+tiyuvta deploys open-source frontier models on hardware you can afford; the trial endpoint
+serves one of them itself, DeepSeek-V4.1-Flash, so you can put a few dollars in and test your
+own workload before we talk about your deployment. The endpoint is OpenAI-compatible: streaming,
+tool calling, structured output, and vision where the model has eyes. The plugin reads the live
+model catalog, so whatever the endpoint serves appears without a plugin update.
 
 ## Installation
 
@@ -22,7 +23,7 @@ llm install llm-tiyuvta
 
 ## Configuration
 
-Get an API key from [inference.tiyuvta.ai](https://inference.tiyuvta.ai/login?ref=llm-plugin), then:
+Get a trial key at [tiyuvta.ai/services/try](https://tiyuvta.ai/services/try/), then:
 
 ```bash
 llm keys set tiyuvta
@@ -36,28 +37,28 @@ Models appear in `llm models` once a key is configured.
 
 ## Usage
 
-Run a prompt (short aliases work — `qwen3.8-27b` for `tiyuvta/qwen/qwen3.8-27b`):
+Run a prompt (short aliases work — `deepseek-v4.1-flash` for `tiyuvta/deepseek-ai/deepseek-v4.1-flash`):
 
 ```bash
-llm -m qwen3.8-27b "Three reasons the sky looks blue"
+llm -m deepseek-v4.1-flash "Three reasons the sky looks blue"
 ```
 
 Chat interactively:
 
 ```bash
-llm chat -m qwen3.8-27b
+llm chat -m deepseek-v4.1-flash
 ```
 
 Vision — attach an image:
 
 ```bash
-llm -m qwen3.8-27b "describe this" -a photo.jpg
+llm -m deepseek-v4.1-flash "describe this" -a photo.jpg
 ```
 
 Tools and schemas work the way they do for any OpenAI-compatible LLM model:
 
 ```bash
-llm -m qwen3.8-27b --schema 'name, bullet_points: three key points' "summarize: ..."
+llm -m deepseek-v4.1-flash --schema 'name, bullet_points: three key points' "summarize: ..."
 ```
 
 List the models the endpoint currently serves:
