@@ -1,7 +1,7 @@
 [project]
 name = "llm-tiyuvta"
 version = "0.1.2"
-description = "LLM plugin for the tiyuvta trial endpoint (api.tiyuvta.ai): DeepSeek-V4.1-Flash, OpenAI-compatible"
+description = "LLM plugin for tiyuvta (tiyuvta.ai): the lab's own DeepSeek-V4.1-Flash deployment at api.tiyuvta.ai, OpenAI-compatible"
 readme = "README.md"
 authors = [{ name = "Avi Fenesh" }]
 license = "Apache-2.0"

@@ -5,13 +5,15 @@
 [![Tests](https://github.com/avifenesh/llm-tiyuvta/actions/workflows/test.yml/badge.svg)](https://github.com/avifenesh/llm-tiyuvta/actions/workflows/test.yml)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/avifenesh/llm-tiyuvta/blob/main/LICENSE)
 
-[LLM](https://llm.datasette.io/) plugin for the [tiyuvta](https://tiyuvta.ai/) trial endpoint.
+[LLM](https://llm.datasette.io/) plugin for [tiyuvta](https://tiyuvta.ai/).
 
-tiyuvta deploys open-source frontier models on hardware you can afford; the trial endpoint
-serves one of them itself, DeepSeek-V4.1-Flash, so you can put a few dollars in and test your
-own workload before we talk about your deployment. The endpoint is OpenAI-compatible: streaming,
-tool calling, structured output, and vision where the model has eyes. The plugin reads the live
-model catalog, so whatever the endpoint serves appears without a plugin update.
+tiyuvta is a research lab that deploys open-source frontier models on hardware you can afford,
+by reworking the serving engine and the model to fit the cards you can buy. This plugin talks to
+the one deployment the lab runs itself on that engine, DeepSeek-V4.1-Flash at api.tiyuvta.ai,
+served as the proof: put a few dollars in and test your own workload before we talk about yours.
+The endpoint is OpenAI-compatible: streaming, tool calling, structured output, and vision where
+the model has eyes. The plugin reads the live model catalog, so whatever the endpoint serves
+appears without a plugin update.
 
 ## Installation
 
