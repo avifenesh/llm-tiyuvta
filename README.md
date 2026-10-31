@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/avifenesh/llm-tiyuvta/blob/main/LICENSE)
 
 > **The endpoint is closed.** api.tiyuvta.ai stopped serving on 2026-09-28 and will not come back.
-> It answers `service_paused`, so the plugin registers no models and trial keys are no longer issued.
+> It answers `service_paused`. New installs register no models; an existing install still lists models from its cached catalog, but every request fails. Trial keys are no longer issued.
 
 [LLM](https://llm.datasette.io/) plugin for [tiyuvta](https://tiyuvta.ai/).
 
