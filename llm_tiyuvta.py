@@ -1,4 +1,8 @@
-"""LLM plugin for tiyuvta — prepaid inference at https://api.tiyuvta.ai/v1.
+"""LLM plugin for the retired tiyuvta inference endpoint (closed 2026-09-28).
+
+The plugin registers no models: `register_models` returns at once, so an
+upgrade clears any cached model list and no command calls the dead endpoint.
+The rest of the module is kept as it was.
 
 Every model on the endpoint speaks the identical OpenAI-compatible API
 (streaming, tools, structured output, vision where the model has eyes), so
@@ -20,6 +24,7 @@ import llm
 from llm.default_plugins.openai_models import AsyncChat, Chat
 
 API_BASE = "https://api.tiyuvta.ai/v1"
+RETIRED = True
 KEY_NAME = "tiyuvta"
 KEY_ENV_VAR = "TIYUVTA_KEY"
 
@@ -111,6 +116,9 @@ def _chat_kwargs(model_definition):
 
 @llm.hookimpl
 def register_models(register):
+    # The endpoint closed on 2026-09-28: register nothing and make no request.
+    if RETIRED:
+        return
     # Only register when a key is configured, so `llm models` stays clean for
     # people who installed this plugin but have not signed up yet.
     key = llm.get_key("", KEY_NAME, KEY_ENV_VAR)

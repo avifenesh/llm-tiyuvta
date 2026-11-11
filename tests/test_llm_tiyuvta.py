@@ -105,3 +105,17 @@ def test_execute_guard_blocks_unsupported_attachments(httpx_mock):
         vision.conversation().prompt("hi", attachments=[pdf], key="x").text()
 
     assert len(httpx_mock.get_requests()) == 0
+
+
+def test_retired_plugin_registers_nothing_and_makes_no_request(monkeypatch):
+    # The endpoint closed on 2026-09-28: even with a key set, no model is
+    # registered and the catalog is never fetched.
+    monkeypatch.setenv(llm_tiyuvta.KEY_ENV_VAR, "sk-test")
+
+    def no_fetch():
+        raise AssertionError("the retired plugin must not fetch the catalog")
+
+    monkeypatch.setattr(llm_tiyuvta, "get_tiyuvta_models", no_fetch)
+    registered = []
+    llm_tiyuvta.register_models(lambda *a, **k: registered.append(a))
+    assert registered == []
