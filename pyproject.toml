@@ -5,7 +5,7 @@ description = "Retired: the tiyuvta inference endpoint closed on 2026-09-28. Tiy
 readme = "README.md"
 authors = [{ name = "Avi Fenesh" }]
 license = "Apache-2.0"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers = ["Development Status :: 7 - Inactive"]
 # llm>=0.26: supports_tools landed there; on 0.24/0.25 registration TypeErrors
 dependencies = ["llm>=0.26", "httpx", "click"]
